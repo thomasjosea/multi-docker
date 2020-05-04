@@ -1,0 +1,21 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t gutothomas/react-complex-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true gutothomas/react-complex-test npm test
+
+after_success:
+    - docker build -t gutothomas/multi-client ./client
+    - docker build -t gutothomas/multi-nginx ./nginx
+    - docker build -t gutothomas/multi-server ./server
+    - docker build -t gutothomas/multi-worker ./worker
+    - # Log in to the Docker CLI to be able to push images
+    - echo "$DOCKER_PASS" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push gutothomas/multi-client
+    - docker push gutothomas/multi-nginx
+    - docker push gutothomas/multi-server
+    - docker push gutothomas/multi-worker
