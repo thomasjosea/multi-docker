@@ -2,8 +2,7 @@ sudo: required
 services:
     - docker
 
-before_install
-    - sudo apt-get -y install docker-ce pass
+before_install:
     - docker build -t gutothomas/react-complex-test -f ./client/Dockerfile.dev ./client
 
 script:
