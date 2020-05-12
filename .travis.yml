@@ -19,3 +19,15 @@ after_success:
     - docker push gutothomas/multi-nginx
     - docker push gutothomas/multi-server
     - docker push gutothomas/multi-worker
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east2
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-us-east-2-483734816787
+    bucket_path: docker-multi
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
